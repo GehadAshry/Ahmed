@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day 💖</title>
+    <link rel="stylesheet" href="Styles.css">
+</head>
+<body>
+    <h1>Happy Valentine's Day!</h1>
+
+    <!-- Photo Gallery -->
+    <div class="photo-gallery">
+        <div class="frame">
+            <div class="clip"></div>
+            <img src="pic1.jpeg" alt="Photo 1">
+        </div>
+        <div class="frame">
+            <div class="clip"></div>
+            <img src="pic2.jpeg" alt="Photo 2">
+        </div>
+        <div class="frame">
+            <div class="clip"></div>
+            <img src="pic3.jpeg" alt="Photo 3">
+        </div>
+    </div>
+
+    <!-- Heart that bursts -->
+    <div class="heart-container" onclick="burstHearts()">
+        <div class="heart"></div>
+    </div>
+
+    <!-- Love Meter -->
+    <div class="love-meter-container">
+        <div class="meter">
+            <div class="fill"></div>
+        </div>
+        <button class="button" onclick="fillMeter()">Fill with Love 💖</button>
+    </div>
+<!-- Love Message -->
+    <div class="love-message" id="loveMessage" onclick="goToQuiz()">Love You 💖</div>
+	
+    <script>
+        let fillHeight = 0;
+
+        function burstHearts() {
+    const heartContainer = document.querySelector('.heart-container');
+    heartContainer.style.display = 'none'; // Hide main heart
+
+    for (let i = 0; i < 20; i++) {
+        const smallHeart = document.createElement('div');
+        smallHeart.classList.add('heart-burst');
+
+        // Corrected template literals
+        smallHeart.style.left = `${Math.random() * 100}%`;
+        smallHeart.style.top = `${Math.random() * 100}%`;
+        smallHeart.style.setProperty('--x', `${Math.random() * 200 - 100}%`);
+        smallHeart.style.setProperty('--y', `${Math.random() * 200 - 100}%`);
+
+        document.body.appendChild(smallHeart);
+
+        smallHeart.addEventListener('animationend', () => {
+            smallHeart.remove();
+        });
+    }
+
+    setTimeout(() => {
+        heartContainer.style.display = 'block';
+    }, 2000);
+}
+        function fillMeter() {
+            if (fillHeight < 100) {
+                fillHeight += 20;
+                document.querySelector('.fill').style.height = fillHeight + '%';
+            }  else {
+                document.getElementById('loveMessage').style.opacity = '1';
+            }
+        }
+		function goToQuiz() {
+            window.location.href = "TestYourLove.html";  // Redirect to the quiz page
+        }
+    </script>
+</body>
+</html>

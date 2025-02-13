@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Test Your Love</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffe6f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #ff0036;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background-color: #ffe6f2;
+            border: 2px solid #ff0036;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 10px auto;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            transition: opacity 0.5s ease-in-out;
+            display: none; /* Initially hidden */
+        }
+
+        /* Ensure first question is visible */
+        #question1 {
+            opacity: 1;
+            display: block;
+        }
+
+        .question-card input {
+            padding: 10px;
+            width: 90%;
+            margin-bottom: 10px;
+            border: 1px solid #ff0036;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .question-card button {
+            background-color: #ff0036;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+        }
+
+        .question-card button:hover {
+            background-color: #ff69b4;
+        }
+
+        #finish {
+            text-align: center;
+            font-size: 1.5em;
+            color: #ff0036;
+            display: none;
+        }
+
+        /* Redirect Button */
+        #redirectButton {
+            display: none;
+            background-color: #ff0036;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        #redirectButton:hover {
+            background-color: #ff69b4;
+        }
+
+        /* Show class */
+        .question-card.show {
+            opacity: 1;
+            display: block;
+        }
+
+        /* Fireworks Container */
+        #fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: radial-gradient(circle, #ff1493, #ff4500, #ffd700, #adff2f, #32cd32, #1e90ff, #4b0082, #8a2be2);
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); }
+            100% { transform: scale(5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>How well do you know our love story? 💖</h1>
+
+    <!-- Question Cards -->
+    <div id="question1" class="question-card">
+        <p>When was our first date? (Hint: Thursday!)</p>
+        <input type="text" id="answer1" autocomplete="off">
+        <button onclick="checkAnswer(1, '7/10/2021', 'question2', 'question1')">Submit</button>
+    </div>
+
+    <div id="question2" class="question-card">
+        <p>What is our anniversary date? (Hint: Date)</p>
+        <input type="text" id="answer2" autocomplete="off">
+        <button onclick="checkAnswer(2, '6/10/2022', 'question3', 'question2')">Submit</button>
+    </div>
+
+    <div id="question3" class="question-card">
+        <p>What was the first movie we watched together?</p>
+        <input type="text" id="answer3" autocomplete="off">
+        <button onclick="checkAnswer(3, 'Dune1', 'question4', 'question3')">Submit</button>
+    </div>
+
+    <div id="question4" class="question-card">
+        <p>What was our special song? (Hint: Song Title)</p>
+        <input type="text" id="answer4" autocomplete="off">
+        <button onclick="checkAnswer(4, 'Naked', 'finish', 'question4')">Submit</button>
+    </div>
+
+    <div id="finish">
+        <p>I knew you could do it! 💖</p>
+    </div>
+
+    <button id="redirectButton" onclick="redirectToNextPage()">Ready to go to the next page?</button>
+
+    <div id="fireworks-container"></div>
+
+    <script>
+        let fireworksInterval;
+
+        function showNextQuestion(nextQuestionId) {
+            const nextQuestion = document.getElementById(nextQuestionId);
+            if (nextQuestion) {
+                nextQuestion.classList.add("show");  
+                nextQuestion.style.display = "block"; 
+            }
+        }
+
+        function hideQuestion(currentQuestionId) {
+            const currentQuestion = document.getElementById(currentQuestionId);
+            if (currentQuestion) {
+                currentQuestion.classList.remove("show");  
+                currentQuestion.style.display = "none";
+            }
+        }
+
+        function createFireworks() {
+            fireworksInterval = setInterval(() => {
+                const container = document.getElementById('fireworks-container');
+                for (let i = 0; i < 10; i++) {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.top = `${Math.random() * 100}vh`;
+                    firework.style.left = `${Math.random() * 100}vw`;
+                    container.appendChild(firework);
+                    setTimeout(() => { container.removeChild(firework); }, 1000);
+                }
+            }, 200);
+        }
+
+        function checkAnswer(questionNum, correctAnswer, nextQuestionId, currentQuestionId) {
+            console.log(`Checking answer for Question ${questionNum}`);
+            const userAnswer = document.getElementById("answer" + questionNum).value.trim();
+            if (userAnswer.toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                console.log("Correct answer!");
+                hideQuestion(currentQuestionId);
+                if (nextQuestionId === 'finish') {
+                    document.getElementById('finish').style.display = "block";
+                    createFireworks();
+                    document.getElementById('redirectButton').style.display = 'block';
+                    document.querySelector('h1').style.display = 'none';
+                } else {
+                    showNextQuestion(nextQuestionId);
+                }
+            } else {
+                console.log("Wrong answer. Try again!");
+                alert("Incorrect answer. Please try again.");
+            }
+        }
+
+        function redirectToNextPage() {
+            window.location.href = 'LoveJar.html';
+        }
+
+        window.onload = function() { showNextQuestion('question1'); };
+    </script>
+
+</body>
+</html>

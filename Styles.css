@@ -1,0 +1,336 @@
+/* General styling */
+body {
+    text-align: center;
+    background-color: #ffe6f2;
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Title */
+h1 {
+    font-size: 48px;
+    color: #ff0036;
+    margin-top: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Photo Gallery Layout */
+.photo-gallery {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 50px;
+}
+
+/* Pins (clips) */
+.clip {
+    width: 14px;
+    height: 14px;
+    background-color: #ff0036;
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Frames (photo borders) */
+.frame {
+    width: 120px;
+    height: 140px;
+    background-color: white;
+    border: 8px solid #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    transform-origin: top center;
+}
+
+/* Hanging photos */
+.frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Swaying effect to make them appear to be hanging */
+.frame:nth-child(1) {
+    transform: rotate(-8deg);
+    animation: swing1 3s infinite ease-in-out;
+}
+
+.frame:nth-child(2) {
+    transform: rotate(3deg);
+    animation: swing2 3s infinite ease-in-out;
+}
+
+.frame:nth-child(3) {
+    transform: rotate(-5deg);
+    animation: swing3 3s infinite ease-in-out;
+}
+
+/* Swinging Animations */
+@keyframes swing1 {
+    0%, 100% { transform: rotate(-10deg); }
+    50% { transform: rotate(-5deg); }
+}
+
+@keyframes swing2 {
+    0%, 100% { transform: rotate(5deg); }
+    50% { transform: rotate(-2deg); }
+}
+
+@keyframes swing3 {
+    0%, 100% { transform: rotate(-7deg); }
+    50% { transform: rotate(3deg); }
+}
+
+/* Heart Container */
+.heart-container {
+    position: fixed;
+    bottom: 50px;
+    left: 100px;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Heart Shape */
+.heart {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #ff0036;
+    transform: rotate(45deg);
+    animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+.heart:before,
+.heart:after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background: #ff0036;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.heart:before {
+    top: -50px;
+    left: 0;
+}
+
+.heart:after {
+    top: 0;
+    left: -50px;
+}
+
+@keyframes heartbeat {
+    0%, 45%, 75%, 100% { transform: rotate(45deg) scale(1); }
+    30% { transform: rotate(45deg) scale(1.4); }
+    60% { transform: rotate(45deg) scale(1.2); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(0, -10px); }
+}
+
+.heart-burst {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff0036;
+    transform: scale(0.5);
+    animation: fly 2s ease-out forwards;
+}
+
+.heart-burst:before,
+.heart-burst:after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: #ff0036;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.heart-burst:before {
+    top: -10px;
+    left: 0;
+}
+
+.heart-burst:after {
+    top: 0;
+    left: -10px;
+}
+
+@keyframes fly {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) scale(0) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* Love Meter styles */
+.love-meter-container {
+    position: fixed; /* Changed to fixed for better positioning */
+    bottom: 20px;
+    right: 20px; /* Move to bottom right */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.meter {
+    position: relative;
+    width: 50px;
+    height: 200px;
+    border: 2px solid #ff0036;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.meter .fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background-color: #ff0036;
+    transition: height 0.3s;
+}
+
+.button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #ff0036;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #ff69b4;
+}
+.love-message {
+    position: fixed;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: #ff0036;
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #ff66b2, 0 0 30px #ff1493;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    cursor: pointer;
+}
+
+.question-container {
+    position: relative; /* Container for questions */
+    width: 100%;
+    height: 400px; /* Adjust the height as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px; /* Add some space to avoid overlap with the header */
+}
+
+/* Question Cards */
+.question-card {
+    opacity: 0;
+    display: none;
+	    z-index: 5;
+}
+
+.question-card.show {
+    opacity: 1;
+    display: block; /* Ensure the cards are shown */
+	z-index: 10;
+}
+
+#question1 {
+    display: block;
+    opacity: 1;
+}
+
+
+/* Input field and button should be above the card */
+.question-card input {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid #ff0036;
+    border-radius: 5px;
+    font-size: 1em;
+}
+.question-card button {
+    background-color: #ff0036;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    width: 100%;
+}
+.question-card button:hover {
+    background-color: #ff69b4;
+}
+
+#finish {
+    text-align: center;
+    font-size: 1.5em;
+    color: #ff0036;
+    display: none;
+}
+#fireworks-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.firework {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: radial-gradient(circle, #ff1493, #ff4500, #ffd700, #adff2f, #32cd32, #1e90ff, #4b0082, #8a2be2);
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(5);
+        opacity: 0;
+    }
+}
+
+

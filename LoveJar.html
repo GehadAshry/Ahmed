@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Notes Jar</title>
+    <style>
+        :root {
+            --jar-width: 300px;
+            --jar-height: 400px;
+            --heart-min-size: 20px;
+            --heart-max-size: 80px;
+            --padding: 40px; /* Base padding */
+            --top-padding: 60px; /* Larger padding at the top */
+            --bottom-padding: 20px; /* Smaller padding at the bottom */
+            --heart-colors: #d05d65, #e1848c, #eaa8ac, #e7cdce, #c00645,
+                            #EB9CBC, #F2C5D6, #FBFCFE, #D6B2D7, #DA437F,
+                            #945B88, #C8839F, #D19CB3, #E2CADE, #F3C2C6,
+                            #AB1415, #FBB9C6, #76C8C7, #C9271C,
+                            #FF6F61, #FFA07A, #FFB6C1, #FF69B4, #FF1493,
+                            #FF007F, #DB7093, #C71585, #FF4500, #FF6347;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fce4ec;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        h1 {
+            color: #ff4081;
+            margin-bottom: 20px;
+        }
+
+        .jar-container {
+            position: relative;
+            width: var(--jar-width);
+            height: var(--jar-height);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .jar {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+        }
+
+        .heart {
+            position: absolute;
+            clip-path: path("M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        .heart:hover {
+            transform: scale(1.2);
+            opacity: 0.9;
+        }
+
+        @keyframes heartbeat {
+            0%, 45%, 75%, 100% { transform: scale(1); }
+            30% { transform: scale(1.4); }
+            60% { transform: scale(1.2); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal button {
+            margin-top: 10px;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+
+        .modal button:hover {
+            background: #e91e63;
+        }
+
+        /* Structure of little hearts */
+        .lilHearts {
+            height: 30px;
+            width: 30px;
+            position: absolute;
+            top: -30px; /* Start above the screen */
+            background-color: #fb98be;
+            transform: rotate(-45deg);
+        }
+
+        .lilHearts::before,
+        .lilHearts::after {
+            content: "";
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            position: absolute;
+            background-color: #fb98be;
+        }
+
+        .lilHearts::before {
+            left: 50%;
+        }
+
+        .lilHearts::after {
+            bottom: 50%;
+        }
+
+        /* Positioning for falling hearts */
+        #lilHeart0 { left: 0%; }
+        #lilHeart1 { left: 15%; }
+        #lilHeart2 { left: 30%; }
+        #lilHeart3 { left: 45%; }
+        #lilHeart4 { left: 60%; }
+        #lilHeart5 { left: 75%; }
+        #lilHeart6 { left: 90%; }
+
+        /* Animation for falling hearts */
+        .slow {
+            animation: slow 4s infinite ease;
+        }
+
+        .fast {
+            animation: fast 2s infinite ease-in;
+        }
+
+        .med {
+            animation: med 3s infinite ease-out;
+        }
+
+        @keyframes slow {
+            0% { top: -30px; }
+            100% { top: 100%; }
+        }
+
+        @keyframes fast {
+            0% { top: -30px; }
+            100% { top: 100%; }
+        }
+
+        @keyframes med {
+            0% { top: -30px; }
+            100% { top: 100%; }
+        }
+		.redirect-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff0036;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .redirect-button:hover {
+            background-color: #ff69b4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Click on a heart to read a message just for you!</h1>
+    <div class="jar-container">
+        <img src="heartsJar.png" class="jar" alt="Jar">
+        <!-- Hearts will be dynamically added here -->
+    </div>
+    <div class="modal" id="modal">
+        <p id="modalText"></p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+    <div class="back">
+        <div class="lilHearts fast" id="lilHeart0"></div>
+        <div class="lilHearts slow" id="lilHeart1"></div>
+        <div class="lilHearts med" id="lilHeart2"></div>
+        <div class="lilHearts fast" id="lilHeart3"></div>
+        <div class="lilHearts med" id="lilHeart4"></div>
+        <div class="lilHearts slow" id="lilHeart5"></div>
+        <div class="lilHearts fast" id="lilHeart6"></div>
+    </div> 
+    <button class="redirect-button" onclick="redirectToNextPage()">Now it is your turn 💖</button>
+   
+    <script>
+        // Constants
+        const MESSAGES = [
+            "Thank you for being mine!",
+            "You are my sunshine, my only sunshine!",
+            "Whenever I'm with you, I'm home",
+            "Life is better when I have you by my side",
+            "Every scar. Every flaw. Every imperfection. I love you",
+            "I love that we've never lost the magic that makes us us.",
+            "At the heart of it all, we’re friends. I love that, and I love you.",
+            "The best things in life are better with you.",
+            "You’re the one. I’ve never been so sure of anything in my whole life",
+            "Thank you for making me laugh and smile every single day since the day we met",
+            "I love you because you're the person who annoys me the least.",
+            "I would rather share one lifetime with you than face all the ages of this world alone.",
+            "To me, you are perfect."
+        ];
+
+        const HEART_COLORS = [
+            "#d05d65", "#e1848c", "#eaa8ac", "#e7cdce", "#c00645",
+            "#EB9CBC", "#F2C5D6", "#FBFCFE", "#D6B2D7", "#DA437F",
+            "#945B88", "#C8839F", "#D19CB3", "#E2CADE", "#F3C2C6",
+            "#AB1415", "#FBB9C6", "#76C8C7", "#C9271C",
+            "#FF6F61", "#FFA07A", "#FFB6C1", "#FF69B4", "#FF1493",
+            "#FF007F", "#DB7093", "#C71585", "#FF4500", "#FF6347"
+        ];
+
+        const MIN_HEART_SIZE = 20;
+        const MAX_HEART_SIZE = 80;
+        const PADDING = 40; // Base padding
+        const TOP_PADDING = 60; // Larger padding at the top
+        const BOTTOM_PADDING = 20; // Smaller padding at the bottom
+
+        // Helper Functions
+        function getRandomSize(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomColor() {
+            return HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)];
+        }
+
+        function getRandomPosition(containerWidth, containerHeight, heartSize) {
+            const safeZoneWidth = containerWidth - 2 * PADDING - heartSize;
+            const safeZoneHeight = containerHeight - TOP_PADDING - BOTTOM_PADDING - heartSize;
+
+            const x = PADDING + Math.floor(Math.random() * safeZoneWidth);
+            const y = TOP_PADDING + Math.floor(Math.random() * safeZoneHeight);
+
+            return { x, y };
+        }
+
+        function getRandomMessage() {
+            return MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+        }
+
+        // Heart Creation
+        function createHearts() {
+            const jarContainer = document.querySelector('.jar-container');
+            if (!jarContainer) return;
+
+            const containerWidth = jarContainer.clientWidth;
+            const containerHeight = jarContainer.clientHeight;
+
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+
+                const size = getRandomSize(MIN_HEART_SIZE, MAX_HEART_SIZE);
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.backgroundColor = getRandomColor();
+
+                const { x, y } = getRandomPosition(containerWidth, containerHeight, size);
+                heart.style.top = `${y}px`;
+                heart.style.left = `${x}px`;
+
+                heart.addEventListener('click', () => openNote(getRandomMessage()));
+                jarContainer.appendChild(heart);
+            }
+        }
+
+        // Modal Functions
+        function openNote(message) {
+            const modal = document.getElementById('modal');
+            const modalText = document.getElementById('modalText');
+            if (modal && modalText) {
+                modalText.innerText = message;
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function redirectToNextPage() {
+            window.location.href = "LeaveMsg.html"; // Replace with the URL of the next page
+        }
+
+        // Initialize
+        window.onload = createHearts;
+    </script>
+</body>
+</html>
